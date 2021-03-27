@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+
+
+  <head>
+    <title>ESSEC WayFinding</title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G470DE3JT9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G470DE3JT9');
+</script>
+
+
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+<script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+<script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+  <script>
+    //window.onload = function () {
+      //document
+       // .querySelector(".say-hi-button")
+        //.addEventListener("click", function () {
+          // here you can change also a-scene or a-entity properties, like
+          // changing your 3D model source, size, position and so on
+          // or you can just open links, trigger actions...
+         // alert("Hi there!");
+        //});
+    //};
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+
+
+    //var x_code = 0;
+    //var y_code = 0;
+    //var arrow = document.querySelector('#arrow')
+
+    //    function getAngleDeg(ax,ay,bx,by) {
+     //   var angleRad = Math.atan((ay-by)/(ax-bx));
+      //  var angleDeg = angleRad * 180 / Math.PI;
+     //   if (ax < 0){
+      //    var finalAngleRad = angleDeg + 180;
+       // }
+     //   else{
+     //     var finalAngleRad = angleDeg;
+     //   }
+     //   return(finalAngleRad);
+    //  }
+      document.querySelector('#room-change').onchange = function() {
+        <!--var coords = this.value.split(" ");
+        <!--var x = parseInt(coords.slice(0,1));
+        <!--var y = parseInt(coords.slice(1,2));
+        <!--var note = coords.slice(2,3);
+        <!--if (note == "pool"){
+        <!--  notes.innerHTML = 'Take elevator to ground floor. 40 meters';
+        <!--}
+        <!--if (note == "table_tennis"){
+        <!--  notes.innerHTML = '50 meters';
+        <!--}
+        <!--if (note == "basketball"){
+        <!--  notes.innerHTML = '20 meters';
+        <!--}
+        <!--var angle = getAngleDeg(x,y,x_code,y_code);-->
+        var dest_room = this.value.slice(1,2);
+        dest_floor = parseInt(this.value.slice(0,1));
+
+        var map_floor = ["1","1","2","2","3","4","4","5","5"];
+        var map_code = ["1ON", "1BV","2ON", "2BV","3","4ON", "4BV","5ON", "5BV",];
+
+        map_floor.forEach((map_f, index) => {
+          const map_c = map_code[index];
+          console.log(map_c, map_f);
+
+          if (dest_floor == map_f){
+            var new_src = "https://cdn.glitch.com/4f2ae5fa-edc1-4f38-afe7-6c5c95ea8746%2F"+ map_c + '_to_' + dest_room + '.png';
+                           https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2F1BV.png?v=1612874593145
+            document.getElementsByClassName("map")[index].setAttribute('src', new_src);
+          }
+          else{
+            var new_src = "https://cdn.glitch.com/4f2ae5fa-edc1-4f38-afe7-6c5c95ea8746%2F"+ map_c + '_to_lift.png';  //change to lift level 1
+            document.getElementsByClassName("map")[index].setAttribute('src', new_src);
+          }
+
+        });
+
+        if (marker_visible) {
+        if (markerId>dest_floor){
+          document.getElementById("directions").innerHTML = 'Take elevator down to floor '+dest_floor;
+          document.getElementById("directions_holder").style.visibility = "visible";
+        }
+        else if (markerId<dest_floor){
+          document.getElementById("directions").innerHTML = 'Take elevator up to floor '+dest_floor;
+          document.getElementById("directions_holder").style.visibility = "visible";
+        }
+        else{
+        document.getElementById("directions_holder").style.visibility = "hidden";
+				document.getElementById("directions").innerHTML = '';
+        }
+        }
+
+        //if maerker not lost yet tells you to go to that floor
+
+        //alert('Mark'+markerId);
+        dest_selected = true;
+
+
+
+
+
+
+
+              <!--arrow.setAttribute('rotation', `0 ${angle} 0`);-->
+        <!--angles.innerHTML = `${x} ${y} ${angle}`;-->
+      };
+
+  });
+  </script>
+
+
+
+<script>
+    window.addEventListener('camera-init', (data) => {
+        console.log('camera-init', data);
+    })
+
+    window.addEventListener('camera-error', (error) => {
+        console.log('camera-error', error);
+    })
+
+
+
+	AFRAME.registerComponent('registerevents', {
+		init: function () {
+			var marker = this.el;
+
+			marker.addEventListener('markerFound', function() {
+
+
+               function setCookie(cname,cvalue,exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie() {
+  var user=getCookie("username");
+  if (user != "") {
+
+      //alert(user);
+
+  } else {
+
+       setCookie("username", Math.random(), 30);
+                function buttonclick(){
+                                var pagebutton= document.getElementById("selfclick");
+                                pagebutton.click();
+                                }
+
+
+      setTimeout(buttonclick, 30000);
+
+  }
+}
+
+          checkCookie();
+
+
+        markerId = parseInt(marker.id);
+        marker_visible = true;
+        if (markerId>dest_floor){
+          document.getElementById("directions").innerHTML = 'Take elevator down to floor '+dest_floor;
+          document.getElementById("directions_holder").style.visibility = "visible";
+        }
+        else if (markerId<dest_floor){
+          document.getElementById("directions").innerHTML = 'Take elevator up to floor '+dest_floor;
+          document.getElementById("directions_holder").style.visibility = "visible";
+        }
+				// TODO: Add your own code here to react to the marker being found.
+			});
+
+			marker.addEventListener('markerLost', function() {
+				var markerId = marker.id;
+        marker_visible = true;
+        document.getElementById("directions_holder").style.visibility = "hidden";
+				document.getElementById("directions").innerHTML = '';
+				// TODO: Add your own code here to react to the marker being lost.
+			});
+		}
+	});
+</script>
+
+
+
+
+  <style>
+    .buttons {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .say-hi-button {
+      padding: 0.25em;
+      border-radius: 4px;
+      border: none;
+      background: white;
+      color: black;
+      width: 4em;
+      height: 2em;
+    }
+
+       div.fixed {
+  position: fixed;
+  bottom: 10px;
+         right : 10px;
+}
+
+  </style>
+
+
+  </head>
+
+  <body style="margin : 0px; overflow: hidden;">
+    <div class="buttons">
+      <!--<button class="say-hi-button">SAY HI!</button>-->
+    </div>
+            <div style = "position:absolute;top:10px; left:10px; z-index:1000;">
+              <img src = "https://cdn.glitch.com/290789a6-f5c6-4bde-a3a2-1186414444d8%2Fessec-wf-design.png?v=1614818379604"
+                   style="width:30vw;padding:10px">
+              <br>
+              <!--<h1 style="background-color:#109E92;font-family: 'Fredoka One';color:#33364D">WayFinding</h1>-->
+              <!--<p>
+                <mark id = "angles">Angles</mark>
+              </p>-->
+              <!--<br>
+              <select id="room-change">
+              <option disabled selected value>Select Destination</option>
+              <option disabled selected value>Classrooms</option>
+              <option value="-1 0 pool">Library</option>
+              <option value="1 0 basketball">Classroom</option>
+              <option value="-2 -1 table_tennis">Canteen</option>
+              <option disabled selected value>Other Rooms</option>
+              <option value="-1 0 pool">Library</option>
+              <option value="1 0 basketball">Classroom</option>
+              <option value="-2 -1 table_tennis">Canteen</option>
+          </select>-->
+
+
+  <select name="Select Destination" id="room-change">
+  <option style="background-color:blue"  disabled selected value>Select Destination</option>
+    <optgroup label="Level 1">
+      <option value="10">Classroom 1</option>
+      <option value="11">Classroom 2</option>
+      <option value="12">Classroom 3</option>
+      <option value="13">Classroom 4</option>
+      <option value="14">Classroom 5</option>
+      <option value="15">Classroom 6</option>
+    </optgroup>
+    <optgroup label="Level 2">
+      <option value="20">Student Association Room</option>
+      <option value="21">Classroom 7</option>
+      <option value="22">Classroom 8</option>
+    </optgroup>
+    <optgroup label="Level 3">
+      <option value="30">Meeting Room 3M1-2</option>
+      <option value="31">Acc. Affairs and Carr.S.</option>
+      <option value="32">Classroom 9</option>
+      <option value="33">Mkt&Comm/Ex.Ed.</option>
+      <option value="34">Meeting Room 3M3</option>
+      <option value="35">Md,Finance,HR&Dean</option>
+      <option value="36">Fire Command Centre</option>
+      <option value="37">IT&Facilities Off.</option>
+    </optgroup>
+    <optgroup label="Level 4">
+      <option value="40">Student Copier</option>
+      <option value="41">Library</option>
+      <option value="42">Classroom 11</option>
+      <option value="43">Meeting Room 4M2-5</option>
+      <option value="44">Faculty Offices</option>
+      <option value="45">Computer Lab</option>
+    </optgroup>
+    <optgroup label="Level 5">
+      <option value="50">STUDY AREA 1</option>
+      <option value="51">STUDY AREA 2</option>
+      <option value="52">Meeting room 5M1-6</option>
+      <option value="53">Dining Hall</option>
+    </optgroup>
+</select>
+
+              <div class="card" id = 'directions_holder' style="visibility:hidden;background-color:#5bc0de;margin-top:10px">
+<div class="card-body" id = 'directions' >
+  </div>
+</div>
+
+
+    </div>
+
+
+    <div style = "position:absolute;bottom:10px; left:10px; z-index:1000;">
+      <div class="collapse" id="collapseExample" style="padding:5px">
+  <div class="card card-body;width:60vw">
+              <ol>
+                <li>Select a destination</li>
+                <li>Scan the floor QR codes along the way</li>
+                <li>Follow the green arrows</li>
+              </ol>
+  </div>
+</div>
+  <button class="btn btn-primary" type="button" data-toggle="collapse" style="margin:5px"
+          data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Use
+  </button><br>
+    <a class="btn btn-light" style="margin:5px"
+       href="https://forms.gle/DRNQS4LUu25yuAF9A"
+       role="button">Not working?</a>
+      <a class="btn btn-light" style="margin:5px"
+         href="/privacy.html"
+         role="button">Privacy</a>
+      <a id="selfclick" class="typeform-share button btn btn-light" href="https://form.typeform.com/to/G1z8WIjy?typeform-medium=embed-snippet" data-mode="popup"  data-size="100" target="_blank">Review</a> <script> (function() { var qs,js,q,s,d=document, gi=d.getElementById, ce=d.createElement, gt=d.getElementsByTagName, id="typef_orm_share", b="https://embed.typeform.com/"; if(!gi.call(d,id)){ js=ce.call(d,"script"); js.id=id; js.src=b+"embed.js"; q=gt.call(d,"script")[0]; q.parentNode.insertBefore(js,q) } })() </script><!-- Modal -->
+
+    </div>
+
+              <!--<div class="fixed">   https://docs.google.com/forms/d/e/1FAIpQLSfEXLznTa_pi19MsGzUHWRTha8Y8rrYK0Cic-tZvfTcHlZxcw/viewform?usp=sf_link
+              <div id="steps" style="visibility: hidden;">
+               <button onclick()="put picture of the floor ">
+                  Previous
+                </button>
+                <button onclick()="put picture go to lift " >
+                Next
+                </button>
+                <p id= "directions"></p>
+              </div>
+              </div>-->
+
+
+
+    <a-scene embedded arjs='sourceType: webcam;debugUIEnabled: false;'
+             vr-mode-ui="enabled: false;">
+
+    <a-marker type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-1.patt?v=1612678584161'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+              id="1"
+              registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/df8dc5a7-e77d-4650-9406-af718b4a62c1%2F1ON.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+
+      <a-marker markerhandler type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-2.patt?v=1612678631223'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+                id="1"
+                registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/df8dc5a7-e77d-4650-9406-af718b4a62c1%2F1BV.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+
+    <a-marker type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-3.patt'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+              id="2"
+              registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/df8dc5a7-e77d-4650-9406-af718b4a62c1%2F2ON.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+
+      <a-marker markerhandler type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-4.patt'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+                id="2"
+                registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/df8dc5a7-e77d-4650-9406-af718b4a62c1%2F2BV.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+    <a-marker markerhandler type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-5.patt'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+              id="3"
+              registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/df8dc5a7-e77d-4650-9406-af718b4a62c1%2F3.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+          <a-marker markerhandler type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-6.patt'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+                    id="4"
+                    registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/df8dc5a7-e77d-4650-9406-af718b4a62c1%2F4ON.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+          <a-marker markerhandler type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-7.patt'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+                    id="4"
+                    registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/df8dc5a7-e77d-4650-9406-af718b4a62c1%2F4BV.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+          <a-marker markerhandler type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-8.patt'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+                    id="5"
+                    registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/4f2ae5fa-edc1-4f38-afe7-6c5c95ea8746%2F5ON.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+          <a-marker markerhandler type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-9.patt'
+              smooth="true"
+      smoothcount="20"
+      smoothtolerance=".01"
+      smooththreshold="5"
+                    id="5"
+                    registerevents>
+      <a-image class = 'map' src="https://cdn.glitch.com/4f2ae5fa-edc1-4f38-afe7-6c5c95ea8746%2F5BV.png"
+               scale = "7 7 7" position = "0 0 0" rotation = "-90 0 0" opacity = "0.8"></a-image>
+    </a-marker>
+
+
+
+    <!-- handle marker with hiro preset
+    <a-marker type = 'pattern' url = 'https://cdn.glitch.com/56bda6e9-78f5-4963-9433-b309aad1b4f9%2Fpattern-2.patt?v=1612678631223'>
+      <a-box position='0 0.5 0' material='color: red;'></a-box>
+    </a-marker>-->
+
+    <!-- add a simple camera -->
+    <a-entity camera></a-entity>
+  </a-scene>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>
